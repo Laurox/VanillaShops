@@ -1,0 +1,33 @@
+# In this config you can change the crafting recipe of a ShopKeeper
+#
+# If you have no idea what you are doing here - do not change this file
+# The custom recipe is very unstable and can break easily
+# If and only if you have broken the recipe and the plugin crashes, delete the file and
+# a new default recipe will generate after restarting
+
+# This section determines how you craft your ShopKeeper-Item
+shape:
+   # If you would look at a crafting table this configuration represents following pattern:
+   # [ ][D][ ]
+   # [D][E][D]
+   # [ ][D][ ]
+   top: " D "
+   middle: "DED"
+   bottom: " D "
+
+# This section specifies which ingredients are used
+crafting:
+   # List of all Keys
+   # if you want to add an additional item for crafting add an CHAR in this list
+   # STRINGS will not work (!!!)
+   # after that you have to add the material information for that key down below
+   list:
+      - E
+      - D
+
+   # Assigned Material for each Key
+   # If you add another keep the format in mind
+   E:
+      material: "EMERALD_BLOCK"
+   D:
+      material: "DIAMOND"

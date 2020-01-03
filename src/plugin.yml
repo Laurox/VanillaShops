@@ -1,0 +1,14 @@
+main: de.laurox.mc.VanillaShops
+name: VanillaShops
+prefix: VShops
+author: Laurox
+version: 0.2
+api-version: 1.14
+depend:
+   - Vault
+
+commands:
+   summonShop:
+      description: Summons a Villager Shop
+      aliases: ss
+      usage: /<command>

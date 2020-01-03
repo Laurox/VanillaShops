@@ -1,0 +1,42 @@
+# In this config you can change the default texts for ENGLISH.
+# If no DEFAULT translation is available, you can change the messages to your language.
+# Right now we have following default translations:
+# ENGLISH, GERMAN
+
+# You can use all Minecraft color-codes with § or & as prefix
+# A list of all possible colors can be found here:
+# https://minecraft.gamepedia.com/Formatting_codes
+
+# Variables used in each message are written in %VAR above each line
+# This will get REPLACED with custom values when sent to the player
+
+Commands:
+   summon: "§8>> §7A ShopKeeper spawned"
+Trading:
+   errors:
+      # if a player wants to trade but his inventory is full
+      invFull: "§8>> §7Cant handle purchase due to full player inventory"
+      # if the shop is not stocked with enough of the purchased item
+      notStocked: "§8>> §7Shop is not stocked please contact §e%owner §7to restock it"
+      # if the ShopOwner has not emptied the CashBox
+      fullCashbox: "§8>> §7The shops cashbox is full please contact §e%owner §7to empty it"
+      # if the player does not have enough or not all of the required price
+      noItems: "§8>> §7Im sorry! You dont have enough of the required items to make this purchase"
+   purchase: "§8>> §7You successfully purchased §a%amount %purchased§7 for §c%amount %price"
+   offers:
+      # decides if an extra header and footer line will be sent to the player
+      # when validating the offers
+      show: true
+      # the following two will be ignored if SHOW is set to FALSE
+      header: "§7--- --- --- ---"
+      footer: "§7--- --- --- ---"
+
+      # if an offer is valid (2 items placed)
+      valid: "§8>> §7Offer #%num§7 --> §aValid"
+      # if its invalid (just 1 item is placed)
+      invalid: "§8>> §7Offer #%num§7 --> §cInvalid"
+      # if both trade slots are empty
+      empty: "§8>> §7Offer #%num§7 --> §aValid"
+Removing:
+   # when deleting a ShopKeeper via LavaBucket punch
+   delete: "§8>> §7This Shopkeeper got removed"
