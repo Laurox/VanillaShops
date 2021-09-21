@@ -5,6 +5,8 @@ import de.laurox.mc.shops.InteractListener;
 import de.laurox.mc.shops.InventoryListener;
 import de.laurox.mc.shops.RemoveListener;
 import de.laurox.mc.shops.SummonCommand;
+import de.laurox.mc.shopsrewrite.InventoryHandler;
+import de.laurox.mc.shopsrewrite.ShopHandler;
 import de.laurox.mc.util.Config;
 import de.laurox.mc.util.Recipe;
 import org.bukkit.Bukkit;
@@ -19,7 +21,7 @@ public class VanillaShops extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.plugin = this;
+        plugin = this;
 
         FileManager.setup(this);
 
@@ -38,6 +40,9 @@ public class VanillaShops extends JavaPlugin {
         pluginManager.registerEvents(new InteractListener(shops), plugin);
         pluginManager.registerEvents(new InventoryListener(), plugin);
         pluginManager.registerEvents(new RemoveListener(), plugin);
+
+        pluginManager.registerEvents(new ShopHandler(), plugin);
+        pluginManager.registerEvents(new InventoryHandler(), plugin);
     }
 
     public static Config getShopsConfig() {

@@ -52,6 +52,7 @@ public class SummonCommand implements CommandExecutor {
         villager.setCustomName("§6Shopkeeper");
         villager.setInvulnerable(true);
         villager.setCollidable(false);
+        villager.setVillagerExperience(1);
         villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255), true);
 
         config = Bukkit.createInventory(villager, 9 * 3, "§cConfig");

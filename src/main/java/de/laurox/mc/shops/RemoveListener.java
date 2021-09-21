@@ -2,6 +2,7 @@ package de.laurox.mc.shops;
 
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;
+import de.laurox.mc.shopsrewrite.BaseShop;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,21 +18,32 @@ public class RemoveListener implements Listener {
         Entity damager = event.getDamager();
         Entity damaged = event.getEntity();
 
-        if(damaged.getCustomName() == null) return;
+        if(!(damaged instanceof Villager))
+            return;
 
-        if (damaged.getCustomName().equalsIgnoreCase("§6Shopkeeper")) {
-            event.setCancelled(true);
-            if (!(damager instanceof Player)) return;
-            Villager villager = (Villager) damaged;
-            Player player = (Player) damager;
+        if (!(damager instanceof Player))
+            return;
 
-            if (!player.isOp() || !player.hasPermission("vs.remove") || !InventoryListener.isOwner(player, villager)) return;
+        Player player = (Player) damager;
+        Villager villager = (Villager) damaged;
 
-            if (player.getInventory().getItemInMainHand().getType().equals(Material.LAVA_BUCKET)) {
-                VanillaShops.getShopsConfig().set(villager.getUniqueId().toString(), null);
-                villager.remove();
-                player.sendMessage(FileManager.getMessage("Removing.delete"));
-            }
+        // Shops must have the correct Custom Name!
+        if (villager.getCustomName() == null || !villager.getCustomName().equalsIgnoreCase("§6Shopkeeper"))
+            return;
+
+        BaseShop baseShop = new BaseShop(villager);
+        event.setCancelled(true);
+
+        if (!player.isOp() && !player.hasPermission("vs.remove") && !baseShop.isOwner(player)) {
+            player.sendMessage(FileManager.getMessage("Removing.missingPerms"));
+            return;
+        }
+
+        if (player.getInventory().getItemInMainHand().getType().equals(Material.LAVA_BUCKET)) {
+            VanillaShops.getShopsConfig().set(villager.getUniqueId().toString(), null);
+            villager.remove();
+            player.sendMessage(FileManager.getMessage("Removing.delete"));
+
         }
     }
 

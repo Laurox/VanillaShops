@@ -4,7 +4,7 @@ prefix: VShops
 author: Laurox
 version: 0.2
 api-version: 1.14
-depend:
+softdepend:
    - Vault
 
 commands:

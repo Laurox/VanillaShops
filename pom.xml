@@ -6,7 +6,7 @@
 
     <groupId>de.laurox.mc</groupId>
     <artifactId>VanillaShops</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2.1-ALPHA</version>
 
 
     <repositories>
@@ -20,7 +20,8 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.3-R0.1-SNAPSHOT</version>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

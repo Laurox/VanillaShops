@@ -1,7 +1,7 @@
 # In this config you can change the default texts for ENGLISH.
 # If no DEFAULT translation is available, you can change the messages to your language.
 # Right now we have following default translations:
-# ENGLISH, GERMAN
+# ENGLISH
 
 # You can use all Minecraft color-codes with § or & as prefix
 # A list of all possible colors can be found here:
@@ -21,7 +21,7 @@ Trading:
       # if the ShopOwner has not emptied the CashBox
       fullCashbox: "§8>> §7The shops cashbox is full please contact §e%owner §7to empty it"
       # if the player does not have enough or not all of the required price
-      noItems: "§8>> §7Im sorry! You dont have enough of the required items to make this purchase"
+      noItems: "§8>> §7Im sorry! You do not have enough of the required items to make this purchase"
    purchase: "§8>> §7You successfully purchased §a%amount %purchased§7 for §c%amount %price"
    offers:
       # decides if an extra header and footer line will be sent to the player
@@ -40,3 +40,4 @@ Trading:
 Removing:
    # when deleting a ShopKeeper via LavaBucket punch
    delete: "§8>> §7This Shopkeeper got removed"
+   missingPerms: "§8>> §7You are not permitted to delete this Shop!"
