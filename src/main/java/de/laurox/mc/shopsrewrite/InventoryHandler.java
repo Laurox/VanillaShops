@@ -3,11 +3,15 @@ package de.laurox.mc.shopsrewrite;
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;
 import de.laurox.mc.util.Config;
+import de.laurox.mc.util.InventoryUtil;
+import de.laurox.mc.util.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,13 +20,15 @@ import java.util.HashMap;
 
 public class InventoryHandler implements Listener {
 
+    private static final HashMap<Player, Integer> validateMap = new HashMap<>();
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         String inventoryTitle = event.getView().getTitle();
         Inventory inventory = event.getInventory();
 
-        if(!ShopHandler.interactionMap.containsKey(player))
+        if (!ShopHandler.interactionMap.containsKey(player))
             return;
 
         BaseShop baseShop = ShopHandler.interactionMap.get(player);
@@ -58,11 +64,28 @@ public class InventoryHandler implements Listener {
         }
 
         if (inventoryTitle.equalsIgnoreCase("§cConfig")) {
-            // TODO: if auto updating validation
-            if (current != null && current.getType().equals(Material.GRAY_STAINED_GLASS_PANE)) {
+            InventoryAction action = event.getAction();
+            int rawSlot = event.getRawSlot();
+
+            if (event.getHotbarButton() != -1) {
                 event.setCancelled(true);
                 return;
             }
+
+            if ((rawSlot > -1 && rawSlot < 9) || (rawSlot > 17 && rawSlot < 27)) {
+                if ((action.equals(InventoryAction.PLACE_ALL) || action.equals(InventoryAction.PLACE_ONE) || action.equals(InventoryAction.PLACE_SOME)) || (action.equals(InventoryAction.PICKUP_ALL) || action.equals(InventoryAction.PICKUP_HALF) || action.equals(InventoryAction.PICKUP_ONE) || action.equals(InventoryAction.PICKUP_SOME))) {
+                    if(!validateMap.containsKey(player)) {
+                        int taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(VanillaShops.getPlugin(), () -> validateAll(event.getInventory()), 2, 2);
+                        validateMap.put(player, taskID);
+                    }
+                }
+            }
+
+            if (rawSlot > 8 && rawSlot < 18) {
+                event.setCancelled(true);
+                return;
+            }
+
         }
 
         if (inventoryTitle.equalsIgnoreCase("§eOrigin")) {
@@ -213,15 +236,40 @@ public class InventoryHandler implements Listener {
             player.getInventory().addItem(purchasedItem.clone());
 
             player.sendMessage(FileManager.getMessage("Trading.purchase")
-                    .replaceFirst("%amount", purchasedItem.getAmount()+"")
+                    .replaceFirst("%amount", purchasedItem.getAmount() + "")
                     .replace("%purchased", purchasedItem.getType().toString().toLowerCase())
-                    .replaceFirst("%amount", priceItem.getAmount()+"")
+                    .replaceFirst("%amount", priceItem.getAmount() + "")
                     .replace("%price", priceItem.getType().toString().toLowerCase())
             );
         }
     }
 
     // INVENTORY UTILS -> NEW CLASS LATER // TODO
+    public static void validateAll(Inventory inventory) {
+        for (int i = 0; i < 9; i++) {
+            Pair<Integer, ItemStack> result = validateOffer(inventory, i);
+            inventory.setItem(result.getK(), result.getV());
+        }
+    }
+
+    public static Pair<Integer, ItemStack> validateOffer(Inventory inventory, int rawSlot) {
+        int direction = 1;
+        int offer = (rawSlot % 9) + 1;
+        if (rawSlot > 17) {
+            direction = -1;
+        }
+
+        boolean emptyTop = inventory.getItem(rawSlot) == null || inventory.getItem(rawSlot).getType().equals(Material.AIR);
+        boolean emptyBottom = inventory.getItem(rawSlot + (18 * direction)) == null || inventory.getItem(rawSlot + (18 * direction)).getType().equals(Material.AIR);
+
+        if (emptyBottom && emptyTop) {
+            return new Pair<>(rawSlot + (9 * direction), InventoryUtil.createItem(Material.GRAY_STAINED_GLASS_PANE, "§eEmpty | Offer #" + offer));
+        } else if (!emptyBottom && !emptyTop) {
+            return new Pair<>(rawSlot + (9 * direction), InventoryUtil.createItem(Material.LIME_STAINED_GLASS_PANE, "§aValid | Offer #" + offer));
+        } else {
+            return new Pair<>(rawSlot + (9 * direction), InventoryUtil.createItem(Material.RED_STAINED_GLASS_PANE, "§cInvalid | Offer #" + offer));
+        }
+    }
 
     /**
      * Checks if a given inventory is full
@@ -245,14 +293,15 @@ public class InventoryHandler implements Listener {
 
     /**
      * Removes the items of type from an inventory.
+     *
      * @param inventory Inventory to modify
-     * @param type The type of Material to remove
-     * @param amount The amount to remove, or Integer.MAX_VALUE to remove all
+     * @param type      The type of Material to remove
+     * @param amount    The amount to remove, or Integer.MAX_VALUE to remove all
      * @return The amount of items that could not be removed, 0 for success, or -1 for failures
      */
     public static int removeItems(Inventory inventory, Material type, int amount) {
 
-        if(type == null || inventory == null)
+        if (type == null || inventory == null)
             return -1;
         if (amount <= 0)
             return -1;
@@ -262,12 +311,16 @@ public class InventoryHandler implements Listener {
             return 0;
         }
 
-        HashMap<Integer,ItemStack> retVal = inventory.removeItem(new ItemStack(type,amount));
+        HashMap<Integer, ItemStack> retVal = inventory.removeItem(new ItemStack(type, amount));
 
         int notRemoved = 0;
-        for(ItemStack item: retVal.values()) {
-            notRemoved+=item.getAmount();
+        for (ItemStack item : retVal.values()) {
+            notRemoved += item.getAmount();
         }
         return notRemoved;
+    }
+
+    public static HashMap<Player, Integer> getValidateMap() {
+        return validateMap;
     }
 }
