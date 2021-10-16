@@ -1,0 +1,8 @@
+# change the default language the plugin uses
+# available choices: en (english), de (german), es (spanish)
+# if you want to change or tweak the messages, checkout your language.yml file
+language: en
+
+# Defines if every created shop has a custom prefix above his custom name
+shopPrefixActive: True
+shopPrefix: "§6§b>§eSHOP§6§b<"

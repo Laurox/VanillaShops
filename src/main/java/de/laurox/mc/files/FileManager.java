@@ -26,12 +26,19 @@ public class FileManager {
         // load main-config
         mainFile = new File(plugin.getDataFolder(), "config.yml");
         mainFile.getParentFile().mkdirs();
+        if(!mainFile.exists()) {
+            try {
+                InputStream in = FileManager.class.getResource("config.yml").openStream();
+                Files.copy(in, mainFile.toPath());
+            } catch (IOException e) {
+                plugin.getLogger().severe("Could not load file: config.yml");
+                e.printStackTrace();
+            }
+        }
+        // saveConfig();
         mainConfig = YamlConfiguration.loadConfiguration(mainFile);
 
-        mainConfig.addDefault("language", "en");
 
-        mainConfig.options().copyDefaults(true);
-        saveConfig();
 
         // load language
         languageFile = new File(plugin.getDataFolder(), mainConfig.getString("language") + ".yml");
@@ -45,7 +52,6 @@ public class FileManager {
             }
         }
         language = YamlConfiguration.loadConfiguration(languageFile);
-        initLang = mainConfig.getString("language");
 
         // load crafting
         craftingFile = new File(plugin.getDataFolder(), "recipe.yml");

@@ -29,11 +29,11 @@ public class SummonCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player) sender;
-            if(!player.isOp() && !player.hasPermission("vs.summon")) return false;
+            if (!player.isOp() && !player.hasPermission("vs.summon")) return false;
 
-            if(args.length != 0) return false;
+            if (args.length != 0) return false;
 
             Location location = player.getLocation();
             spawn(location, player);
@@ -56,23 +56,27 @@ public class SummonCommand implements CommandExecutor {
         villager.setVillagerExperience(1);
         villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255), true);
 
-        ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location.add(0, 0.225, 0), EntityType.ARMOR_STAND);
+        shops = VanillaShops.getShopsConfig();
 
-        as.setInvisible(true);
-        as.setCollidable(false);
-        as.setInvulnerable(true);
-        as.setCustomNameVisible(true);
-        as.setGravity(false);
-        as.setCustomName("§6§b>§eSHOP§6§b<");
+        shops.set(villager.getUniqueId().toString() + ".owner", player.getUniqueId().toString());
+
+        if (FileManager.getConfig().getBoolean("shopPrefixActive")) {
+            ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location.add(0, 0.225, 0), EntityType.ARMOR_STAND);
+            as.setInvisible(true);
+            as.setCollidable(false);
+            as.setInvulnerable(true);
+            as.setCustomNameVisible(true);
+            as.setGravity(false);
+            String prefix = FileManager.getConfig().getString("shopPrefix");
+            as.setCustomName(prefix);
+
+            shops.set(villager.getUniqueId().toString() + ".armorStand", as.getUniqueId().toString());
+        }
 
         config = Bukkit.createInventory(villager, 9 * 3, "§cConfig");
         storage = Bukkit.createInventory(villager, 9 * 3, "§eStorage");
         payment = Bukkit.createInventory(villager, 9 * 3, "§aPayment");
 
-        shops = VanillaShops.getShopsConfig();
-
-        shops.set(villager.getUniqueId().toString() + ".owner", player.getUniqueId().toString());
-        shops.set(villager.getUniqueId().toString() + ".armorStand", as.getUniqueId().toString());
         shops.set(villager.getUniqueId().toString() + ".configTitle", "§cConfig");
         shops.set(villager.getUniqueId().toString() + ".storageTitle", "§eStorage");
         shops.set(villager.getUniqueId().toString() + ".paymentTitle", "§aPayment");
