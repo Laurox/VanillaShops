@@ -1,5 +1,6 @@
 package de.laurox.mc.shopsrewrite;
 
+import de.laurox.mc.VanillaShops;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
@@ -8,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class ShopHandler implements Listener {
 
@@ -24,9 +26,10 @@ public class ShopHandler implements Listener {
 
         Villager villager = (Villager) clickedEntity;
 
-        // Shops must have the correct Custom Name!
-        if (villager.getCustomName() == null || !villager.getCustomName().equalsIgnoreCase("§6Shopkeeper"))
+        Set<String> villagerKeys = VanillaShops.getShopsConfig().getKeys();
+        if (!villagerKeys.contains(villager.getUniqueId().toString())) {
             return;
+        }
 
         BaseShop baseShop = new BaseShop(villager);
         interactionMap.put(player, baseShop);
@@ -37,7 +40,6 @@ public class ShopHandler implements Listener {
             player.openInventory(BaseShop.getEditInventory());
         } else {
             player.openInventory(baseShop.offers());
-
         }
     }
 

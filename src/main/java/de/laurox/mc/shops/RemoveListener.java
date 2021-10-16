@@ -1,5 +1,6 @@
 package de.laurox.mc.shops;
 
+import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;
 import de.laurox.mc.shopsrewrite.BaseShop;
 import de.laurox.mc.util.Pair;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class RemoveListener implements Listener {
 
@@ -31,9 +33,10 @@ public class RemoveListener implements Listener {
         Player player = (Player) damager;
         Villager villager = (Villager) damaged;
 
-        // Shops must have the correct Custom Name!
-        if (villager.getCustomName() == null || !villager.getCustomName().equalsIgnoreCase("§6Shopkeeper"))
+        Set<String> villagerKeys = VanillaShops.getShopsConfig().getKeys();
+        if(!villagerKeys.contains(villager.getUniqueId().toString())) {
             return;
+        }
 
         BaseShop baseShop = new BaseShop(villager);
         event.setCancelled(true);
