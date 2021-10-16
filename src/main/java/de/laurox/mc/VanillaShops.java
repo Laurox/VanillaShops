@@ -3,6 +3,7 @@ package de.laurox.mc;
 import de.laurox.mc.beta.PlayerJoin;
 import de.laurox.mc.files.FileManager;
 import de.laurox.mc.shops.*;
+import de.laurox.mc.shopsrewrite.ChatListener;
 import de.laurox.mc.shopsrewrite.InventoryHandler;
 import de.laurox.mc.shopsrewrite.ShopHandler;
 import de.laurox.mc.util.Config;
@@ -29,6 +30,7 @@ public class VanillaShops extends JavaPlugin {
 
         getCommand("summonShop").setExecutor(new SummonCommand());
         getCommand("listShops").setExecutor(new ListCommand());
+
         Recipe.addShopmerald();
     }
 
@@ -41,6 +43,8 @@ public class VanillaShops extends JavaPlugin {
 
         pluginManager.registerEvents(new ShopHandler(), plugin);
         pluginManager.registerEvents(new InventoryHandler(), plugin);
+
+        pluginManager.registerEvents(new ChatListener(), plugin);
 
         pluginManager.registerEvents(new PlayerJoin(), plugin);
     }

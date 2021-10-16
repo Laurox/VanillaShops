@@ -27,6 +27,7 @@ public class BaseShop {
         editInventory.setItem(8, createItem(Material.DIAMOND_BLOCK, "§aPayment"));
         editInventory.setItem(0, createItem(Material.GREEN_TERRACOTTA, "§aOrigin"));
         editInventory.setItem(1, createItem(Material.YELLOW_TERRACOTTA, "§eProfession"));
+        editInventory.setItem(2, createItem(Material.ANVIL, "§bRename"));
 
         originInventory = Bukkit.createInventory(null, 9, "§eOrigin");
         originInventory.setItem(0, createItem(Material.SAND, "§eDesert"));

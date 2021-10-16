@@ -21,6 +21,7 @@ import java.util.HashMap;
 public class InventoryHandler implements Listener {
 
     private static final HashMap<Player, Integer> validateMap = new HashMap<>();
+    private static final HashMap<Player, Pair<BaseShop, Long>> renameMap = new HashMap<>();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -59,6 +60,11 @@ public class InventoryHandler implements Listener {
                     return;
                 case "§eProfession":
                     player.openInventory(BaseShop.getProfessionInventory());
+                    return;
+                case "§bRename":
+                    player.closeInventory();
+                    renameMap.put(player, new Pair<>(baseShop, System.currentTimeMillis()));
+                    player.sendMessage("§8>> §7Enter new shop name §8(30s)§7:");
                     return;
             }
         }
@@ -322,5 +328,9 @@ public class InventoryHandler implements Listener {
 
     public static HashMap<Player, Integer> getValidateMap() {
         return validateMap;
+    }
+
+    public static HashMap<Player, Pair<BaseShop, Long>> getRenameMap() {
+        return renameMap;
     }
 }
