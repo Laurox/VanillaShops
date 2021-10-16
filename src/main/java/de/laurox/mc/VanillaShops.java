@@ -1,5 +1,6 @@
 package de.laurox.mc;
 
+import de.laurox.mc.beta.PlayerJoin;
 import de.laurox.mc.files.FileManager;
 import de.laurox.mc.shops.*;
 import de.laurox.mc.shopsrewrite.InventoryHandler;
@@ -22,7 +23,6 @@ public class VanillaShops extends JavaPlugin {
 
         FileManager.setup(this);
 
-        //main = new Config(this, "main");
         shops = new Config(this, "shopkeeper");
 
         registerEvents();
@@ -41,6 +41,8 @@ public class VanillaShops extends JavaPlugin {
 
         pluginManager.registerEvents(new ShopHandler(), plugin);
         pluginManager.registerEvents(new InventoryHandler(), plugin);
+
+        pluginManager.registerEvents(new PlayerJoin(), plugin);
     }
 
     public static Config getShopsConfig() {

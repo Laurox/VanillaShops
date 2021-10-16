@@ -67,6 +67,7 @@ public class SummonCommand implements CommandExecutor {
             as.setInvulnerable(true);
             as.setCustomNameVisible(true);
             as.setGravity(false);
+
             String prefix = FileManager.getConfig().getString("shopPrefix");
             as.setCustomName(prefix);
 
