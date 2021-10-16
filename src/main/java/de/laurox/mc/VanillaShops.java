@@ -1,10 +1,7 @@
 package de.laurox.mc;
 
 import de.laurox.mc.files.FileManager;
-import de.laurox.mc.shops.InteractListener;
-import de.laurox.mc.shops.InventoryListener;
-import de.laurox.mc.shops.RemoveListener;
-import de.laurox.mc.shops.SummonCommand;
+import de.laurox.mc.shops.*;
 import de.laurox.mc.shopsrewrite.InventoryHandler;
 import de.laurox.mc.shopsrewrite.ShopHandler;
 import de.laurox.mc.util.Config;
@@ -31,6 +28,7 @@ public class VanillaShops extends JavaPlugin {
         registerEvents();
 
         getCommand("summonShop").setExecutor(new SummonCommand());
+        getCommand("listShops").setExecutor(new ListCommand());
         Recipe.addShopmerald();
     }
 

@@ -5,6 +5,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class Config {
 
@@ -40,6 +41,10 @@ public class Config {
         T value = (T) config.get(path);
         reload();
         return value;
+    }
+
+    public Set<String> getKeys() {
+        return config.getKeys(false);
     }
 
     public void set(String path, Object value) {

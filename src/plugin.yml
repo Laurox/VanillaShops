@@ -12,3 +12,7 @@ commands:
       description: Summons a Villager Shop
       aliases: ss
       usage: /<command>
+   listShops:
+      description: Counts your Shops!
+      aliases: ls
+      usage: /<command>

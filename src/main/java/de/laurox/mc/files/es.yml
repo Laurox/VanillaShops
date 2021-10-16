@@ -1,4 +1,4 @@
-# In this config you can change the default texts for ENGLISH.
+# In this config you can change the default texts for SPANISH.
 # If no DEFAULT translation is available, you can change the messages to your language.
 # Right now we have following default translations:
 # ENGLISH, GERMAN, SPANISH
@@ -15,18 +15,18 @@
 # This will get REPLACED with custom values when sent to the player
 
 Commands:
-   summon: "§8>> §7A ShopKeeper spawned"
+   summon: "§8>> §7A Aldeando Spawnado"
 Trading:
    errors:
       # if a player wants to trade but his inventory is full
-      invFull: "§8>> §7Cant handle purchase due to full player inventory"
+      invFull: "§8>> §7No se puede completar la operacion porque tienes el inventario lleno"
       # if the shop is not stocked with enough of the purchased item
-      notStocked: "§8>> §7Shop is not stocked please contact §e%owner §7to restock it"
+      notStocked: "§8>> §7La tienda no tiene stock porfavor dile a §e%owner §7para que le ponga mas."
       # if the ShopOwner has not emptied the CashBox
-      fullCashbox: "§8>> §7The shops cashbox is full please contact §e%owner §7to empty it"
+      fullCashbox: "§8>> §7El inventario del aldeano esta lleno avisale a §e%owner §7para que lo limpie"
       # if the player does not have enough or not all of the required price
-      noItems: "§8>> §7Im sorry! You do not have enough of the required items to make this purchase"
-   purchase: "§8>> §7You successfully purchased §a%amount %purchased§7 for §c%amount %price"
+      noItems: "§8>> §7Una disculpa crack! No tienes suficiente del item para comprar"
+   purchase: "§8>> §7Compraste exitosamente §a%amount %purchased§7 por la cantidad de §c%amount %price"
    offers:
       # decides if an extra header and footer line will be sent to the player
       # when validating the offers
@@ -36,12 +36,12 @@ Trading:
       footer: "§7--- --- --- ---"
 
       # if an offer is valid (2 items placed)
-      valid: "§8>> §7Offer #%num§7 --> §aValid"
+      valid: "§8>> §7Oferta #%num§7 --> §aValida"
       # if its invalid (just 1 item is placed)
-      invalid: "§8>> §7Offer #%num§7 --> §cInvalid"
+      invalid: "§8>> §7Oferta #%num§7 --> §cInvalida"
       # if both trade slots are empty
-      empty: "§8>> §7Offer #%num§7 --> §aValid"
+      empty: "§8>> §7Oferta #%num§7 --> §aValida"
 Removing:
    # when deleting a ShopKeeper via LavaBucket punch
-   delete: "§8>> §7This Shopkeeper got removed"
-   missingPerms: "§8>> §7You are not permitted to delete this Shop!"
+   delete: "§8>> §7El aldeano ha sido borrado"
+   missingPerms: "§8>> §7Tu no puedes quitar al aldeano!"

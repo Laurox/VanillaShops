@@ -4,6 +4,7 @@ import de.laurox.mc.VanillaShops;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
@@ -131,6 +132,22 @@ public class BaseShop {
 
     public Inventory payment() {
         return buildInventory("payment", this.villager);
+    }
+
+    public boolean remove() {
+        String armorStandID = VanillaShops.getShopsConfig().get(villager.getUniqueId().toString() + ".armorStand");
+
+        if (armorStandID != null) {
+            ArmorStand as = (ArmorStand) VanillaShops.getPlugin().getServer().getEntity(UUID.fromString(armorStandID));
+
+            if(as != null) {
+                as.remove();
+            }
+        }
+
+        VanillaShops.getShopsConfig().set(villager.getUniqueId().toString(), null);
+        villager.remove();
+        return true;
     }
 
     // getters
