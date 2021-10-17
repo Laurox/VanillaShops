@@ -13,12 +13,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import static de.laurox.mc.util.InventoryUtil.createItem;
 
 public class BaseShop {
 
@@ -28,12 +29,12 @@ public class BaseShop {
 
     static {
         editInventory = Bukkit.createInventory(null, 9, "§6Edit");
-        editInventory.setItem(4, createItem(Material.REDSTONE_BLOCK, "§cConfig"));
-        editInventory.setItem(7, createItem(Material.CHEST, "§eStorage"));
-        editInventory.setItem(8, createItem(Material.DIAMOND_BLOCK, "§aPayment"));
-        editInventory.setItem(0, createItem(Material.GREEN_TERRACOTTA, "§aOrigin"));
-        editInventory.setItem(1, createItem(Material.YELLOW_TERRACOTTA, "§eProfession"));
-        editInventory.setItem(2, createItem(Material.ANVIL, "§bRename"));
+        editInventory.setItem(4, createItem(Material.REDSTONE_BLOCK, "§cConfig", new String[]{"", "§7Here you can configure", "§7the trades your shop offers!", "", "§eClick to configure!"}));
+        editInventory.setItem(7, createItem(Material.CHEST, "§eStorage", new String[]{"", "§7Store the items you want", "§7to sell here!", "", "§eClick to open!"}));
+        editInventory.setItem(8, createItem(Material.DIAMOND_BLOCK, "§aPayment", new String[]{"", "§7Your payment will be", "§7collected here!", "", "§eClick to open!"}));
+        editInventory.setItem(0, createItem(Material.GREEN_TERRACOTTA, "§aOrigin", new String[]{"", "§7Lets you can change the", "§7origin of the villager!", "", "§eClick to configure!"}));
+        editInventory.setItem(1, createItem(Material.YELLOW_TERRACOTTA, "§eProfession", new String[]{"", "§7Lets you can change the", "§7profession of the villager!", "", "§eClick to configure!"}));
+        editInventory.setItem(2, createItem(Material.ANVIL, "§bRename", new String[]{"", "§7Lets you change the", "§7name of the villager!", "", "§eClick to rename!"}));
 
         originInventory = Bukkit.createInventory(null, 9, "§eOrigin");
         originInventory.setItem(0, createItem(Material.SAND, "§eDesert"));
@@ -62,19 +63,10 @@ public class BaseShop {
         professionInventory.setItem(16, createItem(Material.IRON_PICKAXE, "§8Smith"));
     }
 
-    private static ItemStack createItem(Material material, String name) {
-        ItemStack itemStack = new ItemStack(material);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(name);
-        itemStack.setItemMeta(itemMeta);
-
-        return itemStack;
-    }
-
     private static Inventory buildInventory(String name, Villager villager) {
-        ArrayList<ItemStack> itemStacks = (ArrayList) VanillaShops.getShopsConfig().get(villager.getUniqueId().toString() + "." + name);
+        ArrayList<ItemStack> itemStacks = VanillaShops.getShopsConfig().get(villager.getUniqueId() + "." + name);
         ItemStack[] array = itemStacks.toArray(new ItemStack[itemStacks.size()]);
-        String title = VanillaShops.getShopsConfig().get(villager.getUniqueId().toString() + "." + name + "Title");
+        String title = VanillaShops.getShopsConfig().get(villager.getUniqueId() + "." + name + "Title");
         Inventory inventory = Bukkit.createInventory(villager, 9 * 3, title);
         int count = 0;
         for (ItemStack itemStack : array) {
@@ -93,12 +85,12 @@ public class BaseShop {
     public BaseShop(Villager villager) {
         this.villager = villager;
 
-        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(VanillaShops.getShopsConfig().get(villager.getUniqueId().toString() + ".owner")));
+        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(VanillaShops.getShopsConfig().get(villager.getUniqueId() + ".owner")));
         this.owner = player.getName();
     }
 
     public boolean isOwner(Player player) {
-        String owner = VanillaShops.getShopsConfig().get(villager.getUniqueId().toString() + ".owner");
+        String owner = VanillaShops.getShopsConfig().get(villager.getUniqueId() + ".owner");
         return owner.equalsIgnoreCase(player.getUniqueId().toString());
     }
 
@@ -142,12 +134,12 @@ public class BaseShop {
     }
 
     public boolean remove() {
-        String armorStandID = VanillaShops.getShopsConfig().get(villager.getUniqueId().toString() + ".armorStand");
+        String armorStandID = VanillaShops.getShopsConfig().get(villager.getUniqueId() + ".armorStand");
 
         if (armorStandID != null) {
             ArmorStand as = (ArmorStand) VanillaShops.getPlugin().getServer().getEntity(UUID.fromString(armorStandID));
 
-            if(as != null) {
+            if (as != null) {
                 as.remove();
             }
         }
@@ -196,7 +188,7 @@ public class BaseShop {
 
         Config shops = VanillaShops.getShopsConfig();
 
-        shops.set(villager.getUniqueId().toString() + ".owner", player.getUniqueId().toString());
+        shops.set(villager.getUniqueId() + ".owner", player.getUniqueId().toString());
 
         if (FileManager.getConfig().getBoolean("shopPrefixActive")) {
             ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location.add(0, 0.225, 0), EntityType.ARMOR_STAND);
@@ -209,22 +201,22 @@ public class BaseShop {
             String prefix = FileManager.getConfig().getString("shopPrefix");
             as.setCustomName(prefix);
 
-            shops.set(villager.getUniqueId().toString() + ".armorStand", as.getUniqueId().toString());
+            shops.set(villager.getUniqueId() + ".armorStand", as.getUniqueId().toString());
         }
 
         Inventory config = Bukkit.createInventory(villager, 9 * 3, "§cConfig");
         Inventory storage = Bukkit.createInventory(villager, 9 * 3, "§eStorage");
         Inventory payment = Bukkit.createInventory(villager, 9 * 3, "§aPayment");
 
-        shops.set(villager.getUniqueId().toString() + ".configTitle", "§cConfig");
-        shops.set(villager.getUniqueId().toString() + ".storageTitle", "§eStorage");
-        shops.set(villager.getUniqueId().toString() + ".paymentTitle", "§aPayment");
+        shops.set(villager.getUniqueId() + ".configTitle", "§cConfig");
+        shops.set(villager.getUniqueId() + ".storageTitle", "§eStorage");
+        shops.set(villager.getUniqueId() + ".paymentTitle", "§aPayment");
         for (int i = 9; i < 18; i++) {
             config.setItem(i, createItem(Material.GRAY_STAINED_GLASS_PANE, "§eEmpty | Offer #" + (i - 8)));
         }
-        shops.set(villager.getUniqueId().toString() + ".config", config.getContents());
-        shops.set(villager.getUniqueId().toString() + ".storage", storage.getContents());
-        shops.set(villager.getUniqueId().toString() + ".payment", payment.getContents());
+        shops.set(villager.getUniqueId() + ".config", config.getContents());
+        shops.set(villager.getUniqueId() + ".storage", storage.getContents());
+        shops.set(villager.getUniqueId() + ".payment", payment.getContents());
 
         shops.reload();
     }

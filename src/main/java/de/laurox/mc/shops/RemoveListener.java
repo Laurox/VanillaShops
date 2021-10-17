@@ -41,12 +41,11 @@ public class RemoveListener implements Listener {
         BaseShop baseShop = new BaseShop(villager);
         event.setCancelled(true);
 
-        if (!player.isOp() && !player.hasPermission("vs.remove") && !baseShop.isOwner(player)) {
-            player.sendMessage(FileManager.getMessage("Removing.missingPerms"));
-            return;
-        }
-
         if (player.getInventory().getItemInMainHand().getType().equals(Material.LAVA_BUCKET)) {
+            if (!player.isOp() && !player.hasPermission("vs.remove") && !baseShop.isOwner(player)) {
+                player.sendMessage(FileManager.getMessage("Removing.missingPerms"));
+                return;
+            }
 
             if (removeMap.containsKey(player) && (System.currentTimeMillis() - removeMap.get(player).getV()) < 10000 && removeMap.get(player).getK().getVillager().getUniqueId().equals(baseShop.getVillager().getUniqueId())) {
                 baseShop.remove();
