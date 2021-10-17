@@ -20,6 +20,8 @@ public class VanillaShops extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        greet(this);
+
         plugin = this;
 
         FileManager.setup(this);
@@ -37,7 +39,7 @@ public class VanillaShops extends JavaPlugin {
     private static void registerEvents() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
-        pluginManager.registerEvents(new InteractListener(shops), plugin);
+        pluginManager.registerEvents(new InteractListener(), plugin);
         pluginManager.registerEvents(new InventoryListener(), plugin);
         pluginManager.registerEvents(new RemoveListener(), plugin);
 
@@ -47,6 +49,13 @@ public class VanillaShops extends JavaPlugin {
         pluginManager.registerEvents(new ChatListener(), plugin);
 
         pluginManager.registerEvents(new PlayerJoin(), plugin);
+    }
+
+    public static void greet(Plugin plugin) {
+        plugin.getLogger().info("     __          ");
+        plugin.getLogger().info("\\  /(_ |_  _  _  ");
+        plugin.getLogger().info(" \\/ __)| )(_)|_) ");
+        plugin.getLogger().info("             |    ");
     }
 
     public static Config getShopsConfig() {

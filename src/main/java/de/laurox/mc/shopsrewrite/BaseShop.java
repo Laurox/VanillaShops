@@ -1,15 +1,21 @@
 package de.laurox.mc.shopsrewrite;
 
 import de.laurox.mc.VanillaShops;
+import de.laurox.mc.files.FileManager;
+import de.laurox.mc.util.Config;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -173,6 +179,54 @@ public class BaseShop {
 
     public static Inventory getProfessionInventory() {
         return professionInventory;
+    }
+
+    public static void spawn(Location location, Player player) {
+        Villager villager = (Villager) location.getWorld().spawnEntity(location, EntityType.VILLAGER);
+        villager.setAdult();
+        villager.setBreed(false);
+        villager.setAgeLock(true);
+        villager.setCanPickupItems(false);
+        villager.setCustomNameVisible(true);
+        villager.setCustomName("§6Shopkeeper");
+        villager.setInvulnerable(true);
+        villager.setCollidable(false);
+        villager.setVillagerExperience(1);
+        villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255), true);
+
+        Config shops = VanillaShops.getShopsConfig();
+
+        shops.set(villager.getUniqueId().toString() + ".owner", player.getUniqueId().toString());
+
+        if (FileManager.getConfig().getBoolean("shopPrefixActive")) {
+            ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location.add(0, 0.225, 0), EntityType.ARMOR_STAND);
+            as.setInvisible(true);
+            as.setCollidable(false);
+            as.setInvulnerable(true);
+            as.setCustomNameVisible(true);
+            as.setGravity(false);
+
+            String prefix = FileManager.getConfig().getString("shopPrefix");
+            as.setCustomName(prefix);
+
+            shops.set(villager.getUniqueId().toString() + ".armorStand", as.getUniqueId().toString());
+        }
+
+        Inventory config = Bukkit.createInventory(villager, 9 * 3, "§cConfig");
+        Inventory storage = Bukkit.createInventory(villager, 9 * 3, "§eStorage");
+        Inventory payment = Bukkit.createInventory(villager, 9 * 3, "§aPayment");
+
+        shops.set(villager.getUniqueId().toString() + ".configTitle", "§cConfig");
+        shops.set(villager.getUniqueId().toString() + ".storageTitle", "§eStorage");
+        shops.set(villager.getUniqueId().toString() + ".paymentTitle", "§aPayment");
+        for (int i = 9; i < 18; i++) {
+            config.setItem(i, createItem(Material.GRAY_STAINED_GLASS_PANE, "§eEmpty | Offer #" + (i - 8)));
+        }
+        shops.set(villager.getUniqueId().toString() + ".config", config.getContents());
+        shops.set(villager.getUniqueId().toString() + ".storage", storage.getContents());
+        shops.set(villager.getUniqueId().toString() + ".payment", payment.getContents());
+
+        shops.reload();
     }
 
 
