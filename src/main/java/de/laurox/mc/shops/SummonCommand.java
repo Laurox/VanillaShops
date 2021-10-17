@@ -19,9 +19,13 @@ public class SummonCommand implements CommandExecutor {
             if (args.length != 0) return false;
 
             Location location = player.getLocation();
-            BaseShop.spawn(location, player);
-            player.sendMessage(FileManager.getMessage("Commands.summon"));
-            return true;
+            boolean allowed = BaseShop.spawn(location, player);
+
+            if (allowed) {
+                player.sendMessage(FileManager.getMessage("Commands.summon"));
+                return true;
+            }
+
         }
         return false;
     }

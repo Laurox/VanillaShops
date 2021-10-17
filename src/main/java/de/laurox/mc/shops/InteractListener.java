@@ -1,5 +1,6 @@
 package de.laurox.mc.shops;
 
+import de.laurox.mc.files.FileManager;
 import de.laurox.mc.shopsrewrite.BaseShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,8 +37,11 @@ public class InteractListener implements Listener {
 
         Location location = event.getClickedBlock().getLocation().add(0.5, 1.0, 0.5);
 
-        // Spawns the Shop
-        BaseShop.spawn(location, player);
+        boolean allowed = BaseShop.spawn(location, player);
+
+        if (!allowed) {
+            return;
+        }
 
         if (itemStack.getAmount() > 1) {
             player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);

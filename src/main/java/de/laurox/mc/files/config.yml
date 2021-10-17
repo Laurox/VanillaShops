@@ -3,6 +3,9 @@
 # if you want to change or tweak the messages, checkout your language.yml file
 language: en
 
+# Sets the maximum numbers of shops a player can summon
+limit: 1
+
 # Defines if every created shop has a custom prefix above his custom name
 shopPrefixActive: False
-shopPrefix: "§6§b>§eSHOP§6§b<"
+shopPrefix: "§6§l>§eSHOP§6§l<"

@@ -173,7 +173,14 @@ public class BaseShop {
         return professionInventory;
     }
 
-    public static void spawn(Location location, Player player) {
+    public static boolean spawn(Location location, Player player) {
+        int cap = FileManager.getConfig().getInt("limit");
+
+        if((cap > 0 && countShops(player) >= cap) && (!player.isOp() && !player.hasPermission("vs.limit"))) {
+            player.sendMessage("§8>> §7You are at the shop limit. Remove at least one before you can spawn more!");
+            return false;
+        }
+
         Villager villager = (Villager) location.getWorld().spawnEntity(location, EntityType.VILLAGER);
         villager.setAdult();
         villager.setBreed(false);
@@ -219,7 +226,20 @@ public class BaseShop {
         shops.set(villager.getUniqueId() + ".payment", payment.getContents());
 
         shops.reload();
+        return true;
     }
 
+    public static int countShops(Player player) {
+        int shopCount = 0;
+
+        for (String key : VanillaShops.getShopsConfig().getKeys()) {
+            String owner = VanillaShops.getShopsConfig().get(key + ".owner");
+            if(owner.equalsIgnoreCase(player.getUniqueId().toString())) {
+                shopCount++;
+            }
+        }
+
+        return shopCount;
+    }
 
 }
