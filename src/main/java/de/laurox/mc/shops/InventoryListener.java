@@ -3,7 +3,7 @@ package de.laurox.mc.shops;
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.shopsrewrite.InventoryHandler;
 import de.laurox.mc.shopsrewrite.ShopHandler;
-import de.laurox.mc.util.Config;
+import de.laurox.mc.files.ShopConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
@@ -17,7 +17,7 @@ public class InventoryListener implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
         String inventoryTitle = event.getView().getTitle();
-        Config shops = VanillaShops.getShopsConfig();
+        ShopConfig shops = VanillaShops.getShopsConfig();
 
         if (!ShopHandler.interactionMap.containsKey(player)) return;
 

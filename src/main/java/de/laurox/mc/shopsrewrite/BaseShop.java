@@ -2,7 +2,7 @@ package de.laurox.mc.shopsrewrite;
 
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;
-import de.laurox.mc.util.Config;
+import de.laurox.mc.files.ShopConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -80,18 +80,19 @@ public class BaseShop {
     }
 
     private final Villager villager;
-    private final String owner;
+    private final String ownerUUID;
+    private final String ownerName;
 
     public BaseShop(Villager villager) {
         this.villager = villager;
 
-        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(VanillaShops.getShopsConfig().get(villager.getUniqueId() + ".owner")));
-        this.owner = player.getName();
+        this.ownerUUID = VanillaShops.getShopsConfig().get(villager.getUniqueId() + ".owner");
+        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID));
+        this.ownerName = player.getName();
     }
 
     public boolean isOwner(Player player) {
-        String owner = VanillaShops.getShopsConfig().get(villager.getUniqueId() + ".owner");
-        return owner.equalsIgnoreCase(player.getUniqueId().toString());
+        return ownerUUID.equalsIgnoreCase(player.getUniqueId().toString());
     }
 
     public Inventory offers() {
@@ -155,8 +156,8 @@ public class BaseShop {
         return villager;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerName() {
+        return ownerName;
     }
 
     // static getters
@@ -172,6 +173,8 @@ public class BaseShop {
     public static Inventory getProfessionInventory() {
         return professionInventory;
     }
+
+    // static methods
 
     public static boolean spawn(Location location, Player player) {
         int cap = FileManager.getConfig().getInt("limit");
@@ -193,7 +196,7 @@ public class BaseShop {
         villager.setVillagerExperience(1);
         villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255), true);
 
-        Config shops = VanillaShops.getShopsConfig();
+        ShopConfig shops = VanillaShops.getShopsConfig();
 
         shops.set(villager.getUniqueId() + ".owner", player.getUniqueId().toString());
 

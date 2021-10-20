@@ -1,4 +1,4 @@
-package de.laurox.mc.shops;
+package de.laurox.mc.commands;
 
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;

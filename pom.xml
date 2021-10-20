@@ -29,21 +29,18 @@
 
         <resources>
             <resource>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <targetPath>.</targetPath>
-                <directory>${basedir}/src/</directory>
                 <includes>
-                    <include>**/*.yml</include>
+                    <include>**/plugin.yml</include>
                 </includes>
             </resource>
-
             <resource>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <targetPath>./de/laurox/mc/files/</targetPath>
-                <directory>${basedir}/src/main/java/de/laurox/mc/files/</directory>
-                <includes>
-                    <include>**/*.yml</include>
-                </includes>
+                <excludes>
+                    <exclude>**/plugin.yml</exclude>
+                </excludes>
             </resource>
         </resources>
 

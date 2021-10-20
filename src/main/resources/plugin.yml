@@ -2,7 +2,7 @@ main: de.laurox.mc.VanillaShops
 name: VanillaShops
 prefix: VShops
 author: Laurox
-version: 0.3
+version: ${project.version}
 api-version: 1.17
 softdepend:
    - Vault

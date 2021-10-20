@@ -1,13 +1,14 @@
 package de.laurox.mc;
 
 import de.laurox.mc.beta.PlayerJoin;
+import de.laurox.mc.commands.ListCommand;
+import de.laurox.mc.commands.SummonCommand;
 import de.laurox.mc.files.FileManager;
 import de.laurox.mc.shops.*;
 import de.laurox.mc.shopsrewrite.ChatListener;
 import de.laurox.mc.shopsrewrite.InventoryHandler;
 import de.laurox.mc.shopsrewrite.ShopHandler;
-import de.laurox.mc.util.Config;
-import de.laurox.mc.util.Recipe;
+import de.laurox.mc.files.ShopConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -16,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class VanillaShops extends JavaPlugin {
 
     private static Plugin plugin;
-    private static Config shops;
+    private static ShopConfig shops;
 
     @Override
     public void onEnable() {
@@ -24,9 +25,9 @@ public class VanillaShops extends JavaPlugin {
 
         plugin = this;
 
-        FileManager.setup(this);
+        FileManager.setup();
 
-        shops = new Config(this, "shopkeeper");
+        shops = new ShopConfig(this, "shopkeeper");
 
         registerEvents();
 
@@ -58,7 +59,7 @@ public class VanillaShops extends JavaPlugin {
         plugin.getLogger().info("             |    ");
     }
 
-    public static Config getShopsConfig() {
+    public static ShopConfig getShopsConfig() {
         return shops;
     }
 

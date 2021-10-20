@@ -3,108 +3,42 @@ package de.laurox.mc.files;
 import de.laurox.mc.VanillaShops;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.List;
 
 public class FileManager {
     private static FileConfiguration mainConfig;
     private static FileConfiguration language;
-    private static FileConfiguration crafting;
 
-    private static File mainFile;
-    private static File languageFile;
-    private static File craftingFile;
-
-    private static String initLang;
-
-    public static void setup(Plugin plugin) {
-        // load main-config
-        mainFile = new File(plugin.getDataFolder(), "config.yml");
-        mainFile.getParentFile().mkdirs();
-        if(!mainFile.exists()) {
-            try {
-                InputStream in = FileManager.class.getResource("config.yml").openStream();
-                Files.copy(in, mainFile.toPath());
-            } catch (IOException e) {
-                plugin.getLogger().severe("Could not load file: config.yml");
-                e.printStackTrace();
-            }
-        }
-        // saveConfig();
-        mainConfig = YamlConfiguration.loadConfiguration(mainFile);
-
-
-
-        // load language
-        languageFile = new File(plugin.getDataFolder(), mainConfig.getString("language") + ".yml");
-        if(!languageFile.exists()) {
-            try {
-                InputStream in = FileManager.class.getResource(mainConfig.get("language") + ".yml").openStream();
-                Files.copy(in, languageFile.toPath());
-            } catch (IOException e) {
-                plugin.getLogger().severe("Could not load file: " + mainConfig.get("language") + ".yml");
-                e.printStackTrace();
-            }
-        }
-        language = YamlConfiguration.loadConfiguration(languageFile);
-
-        // load crafting
-        craftingFile = new File(plugin.getDataFolder(), "recipe.yml");
-        if(!craftingFile.exists()) {
-            try {
-                InputStream in = FileManager.class.getResource("recipe.yml").openStream();
-                Files.copy(in, craftingFile.toPath());
-            } catch (IOException e) {
-                plugin.getLogger().severe("Could not load file: recipe.yml");
-                e.printStackTrace();
-            }
-        }
-        crafting = YamlConfiguration.loadConfiguration(craftingFile);
-
+    public static void setup() {
+        mainConfig = loadConfig("config.yml", "/config.yml");
+        language = loadConfig(mainConfig.getString("language") + ".yml", "/lang/" + mainConfig.get("language") + ".yml");
     }
 
-
-    private static void saveConfig() {
-        try {
-            mainConfig.save(mainFile);
-        } catch (IOException e) {
-            VanillaShops.getPlugin().getLogger().severe("Could not save file: config.yml");
-            e.printStackTrace();
+    private static FileConfiguration loadConfig(String filePath, String resourcePath) {
+        File file = new File(VanillaShops.getPlugin().getDataFolder(), filePath);
+        file.getParentFile().mkdirs();
+        if (!file.exists()) {
+            try {
+                InputStream in = FileManager.class.getResourceAsStream(resourcePath);
+                assert in != null;
+                Files.copy(in, file.toPath());
+            } catch (IOException | NullPointerException e) {
+                VanillaShops.getPlugin().getLogger().severe("Could not load file with path: " + resourcePath);
+                e.printStackTrace();
+            }
         }
+        return YamlConfiguration.loadConfiguration(file);
     }
 
-    /* Get Values */
     public static String getMessage(String key) {
         return (String) language.get(key.replace("&", "§"));
     }
 
-    public static boolean getBool(String key) {
-        return language.getBoolean(key);
-    }
-
-    public static String getShape(String row) {
-        return crafting.getString("shape." + row);
-    }
-
-    public static List<String> getCrafting() {
-        return crafting.getStringList("crafting.list");
-    }
-
-    /* Config Getter */
-    public static FileConfiguration getLanguage() {
-        return language;
-    }
-
     public static FileConfiguration getConfig() {
         return mainConfig;
-    }
-
-    public static FileConfiguration getCraftingConfig() {
-        return crafting;
     }
 }

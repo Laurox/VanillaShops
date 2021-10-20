@@ -1,0 +1,31 @@
+# change the default language the plugin uses
+# available choices: en (english), de (german), es (spanish)
+# if you want to change or tweak the messages, checkout your language.yml file
+language: en
+
+# Sets the maximum numbers of shops a player can summon
+limit: 1
+
+# Defines if every created shop has a custom prefix above his custom name
+shopPrefixActive: False
+shopPrefix: "§6§l>§eSHOP§6§l<"
+
+
+# --- Crafting Recipe ---
+
+# This determines if you want to register a custom recipe for your Shopkeeper-Item
+customCrafting: True
+# This lets you change the crafting recipe
+recipe:
+   # If you looked at a crafting table this configuration represents following pattern:
+   # [ ][DIAMOND][ ]
+   # [DIAMOND][EMERALD_BLOCK][DIAMOND]
+   # [ ][DIAMOND][ ]
+   #
+   # !!! READ BEFORE CHANGING !!!
+   # - EMPTY for no item in that slot
+   # - use a single whitespace as divider
+   # - use the minecraft:RESOURCE_NAME
+   top: "EMPTY DIAMOND EMPTY"
+   middle: "DIAMOND EMERALD_BLOCK DIAMOND"
+   bottom: "EMPTY DIAMOND EMPTY"

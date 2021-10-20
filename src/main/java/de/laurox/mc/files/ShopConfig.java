@@ -1,4 +1,4 @@
-package de.laurox.mc.util;
+package de.laurox.mc.files;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -7,12 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-public class Config {
+public class ShopConfig {
 
     private YamlConfiguration config;
     private File file;
 
-    public Config(Plugin plugin, String configName) {
+    public ShopConfig(Plugin plugin, String configName) {
         if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdir();
 
         file = new File(plugin.getDataFolder(), configName + ".yml");

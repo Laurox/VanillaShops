@@ -2,7 +2,7 @@ package de.laurox.mc.shopsrewrite;
 
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;
-import de.laurox.mc.util.Config;
+import de.laurox.mc.files.ShopConfig;
 import de.laurox.mc.util.InventoryUtil;
 import de.laurox.mc.util.Pair;
 import org.bukkit.Bukkit;
@@ -210,7 +210,7 @@ public class InventoryHandler implements Listener {
             // Rule 2: Shop must be stocked
             if (!storageInventory.containsAtLeast(purchasedItem, purchasedItem.getAmount())) {
                 player.sendMessage(FileManager.getMessage("Trading.errors.notStocked")
-                        .replace("%owner", baseShop.getOwner())
+                        .replace("%owner", baseShop.getOwnerName())
                 );
                 return;
             }
@@ -218,7 +218,7 @@ public class InventoryHandler implements Listener {
             // Rule 3: Payment Inventory have enough space
             if (isFull(paymentInventory)) {
                 player.sendMessage(FileManager.getMessage("Trading.errors.fullCashbox")
-                        .replace("%owner", baseShop.getOwner())
+                        .replace("%owner", baseShop.getOwnerName())
                 );
                 return;
             }
@@ -233,7 +233,7 @@ public class InventoryHandler implements Listener {
             removeItems(storageInventory, purchasedItem.getType(), purchasedItem.getAmount());
             paymentInventory.addItem(priceItem.clone());
 
-            Config shops = VanillaShops.getShopsConfig();
+            ShopConfig shops = VanillaShops.getShopsConfig();
             shops.set(baseShop.getVillager().getUniqueId().toString() + ".storage", storageInventory.getContents());
             shops.set(baseShop.getVillager().getUniqueId().toString() + ".payment", paymentInventory.getContents());
             shops.reload();
@@ -281,7 +281,7 @@ public class InventoryHandler implements Listener {
      * Checks if a given inventory is full
      *
      * @param inventory the given inventory
-     * @return if its full
+     * @return if it is full
      */
     private static boolean isFull(Inventory inventory) {
         return isFull(inventory.getStorageContents());

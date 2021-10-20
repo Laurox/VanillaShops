@@ -1,6 +1,5 @@
 package de.laurox.mc.shops;
 
-import de.laurox.mc.files.FileManager;
 import de.laurox.mc.shopsrewrite.BaseShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
