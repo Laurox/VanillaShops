@@ -1,5 +1,6 @@
 package de.laurox.mc.shopsrewrite;
 
+import de.laurox.mc.MessageParser;
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;
 import de.laurox.mc.files.ShopConfig;
@@ -179,8 +180,12 @@ public class BaseShop {
     public static boolean spawn(Location location, Player player) {
         int cap = FileManager.getConfig().getInt("limit");
 
-        if((cap > 0 && countShops(player) >= cap) && (!player.isOp() && !player.hasPermission("vs.limit"))) {
-            player.sendMessage("§8>> §7You are at the shop limit. Remove at least one before you can spawn more!");
+        if ((cap > 0 && countShops(player) >= cap) && (!player.isOp() && !player.hasPermission("vs.limit"))) {
+            player.sendMessage(
+                    MessageParser.send(
+                            "Commands.limit"
+                    )
+            );
             return false;
         }
 
@@ -237,7 +242,7 @@ public class BaseShop {
 
         for (String key : VanillaShops.getShopsConfig().getKeys()) {
             String owner = VanillaShops.getShopsConfig().get(key + ".owner");
-            if(owner.equalsIgnoreCase(player.getUniqueId().toString())) {
+            if (owner.equalsIgnoreCase(player.getUniqueId().toString())) {
                 shopCount++;
             }
         }

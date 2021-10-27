@@ -1,5 +1,7 @@
 package de.laurox.mc.shopsrewrite;
 
+import com.google.common.collect.ImmutableMap;
+import de.laurox.mc.MessageParser;
 import de.laurox.mc.VanillaShops;
 import de.laurox.mc.files.FileManager;
 import de.laurox.mc.files.ShopConfig;
@@ -64,7 +66,11 @@ public class InventoryHandler implements Listener {
                 case "§bRename":
                     player.closeInventory();
                     renameMap.put(player, new Pair<>(baseShop, System.currentTimeMillis()));
-                    player.sendMessage("§8>> §7Enter new shop name §8(30s)§7:");
+                    player.sendMessage(
+                            MessageParser.send(
+                                    "Renaming.prompt"
+                            )
+                    );
                     return;
             }
         }
@@ -80,7 +86,7 @@ public class InventoryHandler implements Listener {
 
             if ((rawSlot > -1 && rawSlot < 9) || (rawSlot > 17 && rawSlot < 27)) {
                 if ((action.equals(InventoryAction.PLACE_ALL) || action.equals(InventoryAction.PLACE_ONE) || action.equals(InventoryAction.PLACE_SOME)) || (action.equals(InventoryAction.PICKUP_ALL) || action.equals(InventoryAction.PICKUP_HALF) || action.equals(InventoryAction.PICKUP_ONE) || action.equals(InventoryAction.PICKUP_SOME))) {
-                    if(!validateMap.containsKey(player)) {
+                    if (!validateMap.containsKey(player)) {
                         int taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(VanillaShops.getPlugin(), () -> validateAll(event.getInventory()), 2, 2);
                         validateMap.put(player, taskID);
                     }
@@ -193,7 +199,11 @@ public class InventoryHandler implements Listener {
 
             // Rule 1: Buyers Inventory is full
             if (isFull(player.getInventory().getStorageContents())) {
-                player.sendMessage(FileManager.getMessage("Trading.errors.invFull"));
+                player.sendMessage(
+                        MessageParser.send(
+                                "Trading.errors.invFull"
+                        )
+                );
                 return;
             }
 
@@ -209,23 +219,37 @@ public class InventoryHandler implements Listener {
 
             // Rule 2: Shop must be stocked
             if (!storageInventory.containsAtLeast(purchasedItem, purchasedItem.getAmount())) {
-                player.sendMessage(FileManager.getMessage("Trading.errors.notStocked")
-                        .replace("%owner", baseShop.getOwnerName())
+                player.sendMessage(
+                        MessageParser.send(
+                                "Trading.errors.notStocked",
+                                ImmutableMap.of(
+                                        "$ownerName$", "" + baseShop.getOwnerName()
+                                )
+                        )
                 );
                 return;
             }
 
             // Rule 3: Payment Inventory have enough space
             if (isFull(paymentInventory)) {
-                player.sendMessage(FileManager.getMessage("Trading.errors.fullCashbox")
-                        .replace("%owner", baseShop.getOwnerName())
+                player.sendMessage(
+                        MessageParser.send(
+                                "Trading.errors.fullCashbox",
+                                ImmutableMap.of(
+                                        "$ownerName$", "" + baseShop.getOwnerName()
+                                )
+                        )
                 );
                 return;
             }
 
             // Rule 4: Player must have enough cash to pay
             if (!player.getInventory().containsAtLeast(priceItem, priceItem.getAmount())) {
-                player.sendMessage(FileManager.getMessage("Trading.errors.noItems"));
+                player.sendMessage(
+                        MessageParser.send(
+                                "Trading.errors.noItems"
+                        )
+                );
                 return;
             }
 
@@ -241,11 +265,16 @@ public class InventoryHandler implements Listener {
             removeItems(player.getInventory(), priceItem.getType(), priceItem.getAmount());
             player.getInventory().addItem(purchasedItem.clone());
 
-            player.sendMessage(FileManager.getMessage("Trading.purchase")
-                    .replaceFirst("%amount", purchasedItem.getAmount() + "")
-                    .replace("%purchased", purchasedItem.getType().toString().toLowerCase())
-                    .replaceFirst("%amount", priceItem.getAmount() + "")
-                    .replace("%price", priceItem.getType().toString().toLowerCase())
+            player.sendMessage(
+                    MessageParser.send(
+                            "Trading.purchase",
+                            ImmutableMap.of(
+                                    "$amountBought$", "" + purchasedItem.getAmount(),
+                                    "$typeBought$", purchasedItem.getType().toString().toLowerCase(),
+                                    "$amountPaid$", "" + priceItem.getAmount(),
+                                    "$typePaid$", priceItem.getType().toString().toLowerCase()
+                            )
+                    )
             );
         }
     }

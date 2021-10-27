@@ -24,7 +24,7 @@ public class InventoryListener implements Listener {
         Villager villager = ShopHandler.interactionMap.get(player).getVillager();
 
         if (inventoryTitle.equalsIgnoreCase("§eStorage")) {
-            shops.set(villager.getUniqueId().toString() + ".storage", event.getInventory().getContents());
+            shops.set(villager.getUniqueId() + ".storage", event.getInventory().getContents());
         } else if (inventoryTitle.equalsIgnoreCase("§cConfig")) {
             Integer taskID = InventoryHandler.getValidateMap().remove(player);
 
@@ -32,9 +32,9 @@ public class InventoryListener implements Listener {
                 Bukkit.getScheduler().cancelTask(taskID);
             }
 
-            shops.set(villager.getUniqueId().toString() + ".config", event.getInventory().getContents());
+            shops.set(villager.getUniqueId() + ".config", event.getInventory().getContents());
         } else if (inventoryTitle.equalsIgnoreCase("§aPayment")) {
-            shops.set(villager.getUniqueId().toString() + ".payment", event.getInventory().getContents());
+            shops.set(villager.getUniqueId() + ".payment", event.getInventory().getContents());
         }
 
     }

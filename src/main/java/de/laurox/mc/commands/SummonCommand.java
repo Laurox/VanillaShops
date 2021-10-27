@@ -1,6 +1,6 @@
 package de.laurox.mc.commands;
 
-import de.laurox.mc.files.FileManager;
+import de.laurox.mc.MessageParser;
 import de.laurox.mc.shopsrewrite.BaseShop;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -22,7 +22,7 @@ public class SummonCommand implements CommandExecutor {
             boolean allowed = BaseShop.spawn(location, player);
 
             if (allowed) {
-                player.sendMessage(FileManager.getMessage("Commands.summon"));
+                player.sendMessage(MessageParser.send("Commands.summon"));
                 return true;
             }
 

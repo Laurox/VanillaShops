@@ -1,5 +1,6 @@
 package de.laurox.mc.shopsrewrite;
 
+import de.laurox.mc.MessageParser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -14,13 +15,25 @@ public class ChatListener implements Listener {
             if (System.currentTimeMillis() - InventoryHandler.getRenameMap().get(event.getPlayer()).getV() < 30000) {
                 try {
                     InventoryHandler.getRenameMap().get(event.getPlayer()).getK().getVillager().setCustomName(event.getMessage().replace("&", "§"));
-                    event.getPlayer().sendMessage("§8>> §aSuccessfully change name");
+                    event.getPlayer().sendMessage(
+                            MessageParser.send(
+                                    "Renaming.success"
+                            )
+                    );
                 } catch (Exception e) {
-                    event.getPlayer().sendMessage("§8>> §7There was an unexpected error! Could it be that your name was too long?");
+                    event.getPlayer().sendMessage(
+                            MessageParser.send(
+                                    "Renaming.error"
+                            )
+                    );
                 }
 
             } else {
-                event.getPlayer().sendMessage("§8>> §cYour rename request timed out! Be faster next time.");
+                event.getPlayer().sendMessage(
+                        MessageParser.send(
+                                "Renaming.timeout"
+                        )
+                );
             }
             InventoryHandler.getRenameMap().remove(event.getPlayer());
         }

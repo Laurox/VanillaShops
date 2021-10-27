@@ -13,35 +13,34 @@
 
 # Variables used in each message are written in %VAR above each line
 # This will get REPLACED with custom values when sent to the player
-
+General:
+   prefix: "§8>> "
 Commands:
-   summon: "§8>> §7A ShopKeeper spawned"
+   summon: "§7A ShopKeeper spawned"
+   limit: "§7You are at the shop limit. Remove at least one before you can spawn more!"
+   list:
+      # TODO: CAP STRING SPLITTABLE
+      self: "§7You own $playerShopCount$ shopkeepers §8(limit: $playerShopCap$)"
+      others: "§7$playerName$ owns $playerShopCap$ shopkeepers"
+      error: "§7$possiblePlayer$ has not played on this server yet"
 Trading:
    errors:
       # if a player wants to trade but his inventory is full
-      invFull: "§8>> §7Cant handle purchase due to full player inventory"
+      invFull: "§7Cant handle purchase due to full player inventory"
       # if the shop is not stocked with enough of the purchased item
-      notStocked: "§8>> §7Shop is not stocked please contact §e%owner §7to restock it"
+      notStocked: "§7Shop is not stocked please contact §e$ownerName$ §7to restock it"
       # if the ShopOwner has not emptied the CashBox
-      fullCashbox: "§8>> §7The shops cashbox is full please contact §e%owner §7to empty it"
+      fullCashbox: "§7The shops cashbox is full please contact §e$ownerName$ §7to empty it"
       # if the player does not have enough or not all of the required price
-      noItems: "§8>> §7Im sorry! You do not have enough of the required items to make this purchase"
-   purchase: "§8>> §7You successfully purchased §a%amount %purchased§7 for §c%amount %price"
-   offers:
-      # decides if an extra header and footer line will be sent to the player
-      # when validating the offers
-      show: true
-      # the following two will be ignored if SHOW is set to FALSE
-      header: "§7--- --- --- ---"
-      footer: "§7--- --- --- ---"
-
-      # if an offer is valid (2 items placed)
-      valid: "§8>> §7Offer #%num§7 --> §aValid"
-      # if its invalid (just 1 item is placed)
-      invalid: "§8>> §7Offer #%num§7 --> §cInvalid"
-      # if both trade slots are empty
-      empty: "§8>> §7Offer #%num§7 --> §aValid"
+      noItems: "§7Im sorry! You do not have enough of the required items to make this purchase"
+   purchase: "§7You successfully purchased §a$amountBought$ $typeBought$§7 for §c$amountPaid$ $typePaid$"
 Removing:
    # when deleting a ShopKeeper via LavaBucket punch
-   delete: "§8>> §7This Shopkeeper got removed"
-   missingPerms: "§8>> §7You are not permitted to delete this Shop!"
+   delete: "§7This Shopkeeper got removed"
+   missingPerms: "§7You are not permitted to delete this Shop!"
+   warning: "§cWARNING§8: §7This will clear all the remaining items in the Shop!\n§8>> §7Hit the Shopkeeper once again within 10 seconds to proceed."
+Renaming:
+   prompt: "§7Enter new shop name §8(30s)§7:"
+   success: "§aSuccessfully change name"
+   error: "§7There was an unexpected error! Could it be that your name was too long?"
+   timeout: "§cYour rename request timed out! Be faster next time."

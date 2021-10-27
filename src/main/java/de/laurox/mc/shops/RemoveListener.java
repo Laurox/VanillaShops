@@ -1,7 +1,7 @@
 package de.laurox.mc.shops;
 
+import de.laurox.mc.MessageParser;
 import de.laurox.mc.VanillaShops;
-import de.laurox.mc.files.FileManager;
 import de.laurox.mc.shopsrewrite.BaseShop;
 import de.laurox.mc.util.Pair;
 import org.bukkit.Material;
@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class RemoveListener implements Listener {
 
-    private static HashMap<Player, Pair<BaseShop, Long>> removeMap = new HashMap<>();
+    private static final HashMap<Player, Pair<BaseShop, Long>> removeMap = new HashMap<>();
 
     @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent event) {
@@ -34,7 +34,7 @@ public class RemoveListener implements Listener {
         Villager villager = (Villager) damaged;
 
         Set<String> villagerKeys = VanillaShops.getShopsConfig().getKeys();
-        if(!villagerKeys.contains(villager.getUniqueId().toString())) {
+        if (!villagerKeys.contains(villager.getUniqueId().toString())) {
             return;
         }
 
@@ -43,18 +43,29 @@ public class RemoveListener implements Listener {
 
         if (player.getInventory().getItemInMainHand().getType().equals(Material.LAVA_BUCKET)) {
             if (!player.isOp() && !player.hasPermission("vs.remove") && !baseShop.isOwner(player)) {
-                player.sendMessage(FileManager.getMessage("Removing.missingPerms"));
+                player.sendMessage(
+                        MessageParser.send(
+                                "Removing.missingPerms"
+                        )
+                );
                 return;
             }
 
             if (removeMap.containsKey(player) && (System.currentTimeMillis() - removeMap.get(player).getV()) < 10000 && removeMap.get(player).getK().getVillager().getUniqueId().equals(baseShop.getVillager().getUniqueId())) {
                 baseShop.remove();
-                player.sendMessage(FileManager.getMessage("Removing.delete"));
+                player.sendMessage(
+                        MessageParser.send(
+                                "Removing.delete"
+                        )
+                );
             } else {
                 long cM = System.currentTimeMillis();
                 removeMap.put(player, new Pair<>(baseShop, cM));
-                player.sendMessage("§8>> §cWARNING§8: §7This will clear all the remaining items in the Shop!");
-                player.sendMessage("§8>> §7Hit the Shopkeeper once again within 10 seconds to proceed.");
+                player.sendMessage(
+                        MessageParser.send(
+                                "Removing.warning"
+                        )
+                );
             }
 
 

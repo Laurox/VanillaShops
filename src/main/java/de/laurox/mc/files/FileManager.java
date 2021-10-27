@@ -34,11 +34,16 @@ public class FileManager {
         return YamlConfiguration.loadConfiguration(file);
     }
 
-    public static String getMessage(String key) {
-        return (String) language.get(key.replace("&", "§"));
-    }
+    // @Deprecated
+   //  public static String getMessage(String key) {
+   //     return (String) language.get(key.replace("&", "§"));
+    //}
 
     public static FileConfiguration getConfig() {
         return mainConfig;
+    }
+
+    public static FileConfiguration getLanguageConfig() {
+        return language;
     }
 }
